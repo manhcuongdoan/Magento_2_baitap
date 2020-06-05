@@ -1,0 +1,96 @@
+<?php
+/**
+ * tygia
+ *
+ * @copyright Copyright © 2020 Staempfli AG. All rights reserved.
+ * @author    juan.alonso@staempfli.com
+ */
+    stream_context_get_default([
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+        ]
+    ]);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tỷ giá ngoại tệ</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<table border="1">
+    <thead>
+    <tr>
+        <th colspan="5" style="text-align:center"><h2>TỶ GIÁ NGOẠI TỆ</h2></th>
+    </tr>
+    <tr>
+        <td>Mã NT</td>
+        <td>Tên ngoại tệ</td>
+        <td>Mua tiền mặt</td>
+        <td>Mua chuyển khoản</td>
+        <td>Bán</td>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    function check_broken_link($url){
+        $handle   = curl_init($url);
+        if (false === $handle)
+        {
+            return false;
+        }
+        curl_setopt($handle, CURLOPT_HEADER, false);
+        curl_setopt($handle, CURLOPT_FAILONERROR, true);
+        curl_setopt($handle, CURLOPT_NOBODY, true);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, false);
+        $connectable = curl_exec($handle);
+        curl_close($handle);
+        return $connectable;
+    }
+    $url = "http://www.vietcombank.com.vn/exchangerates/ExrateXML.aspx";
+    $thoi_gian_cap_nhat = "";
+    if(check_broken_link($url) === TRUE) {
+        $xml = file_get_contents($url);
+        $data = simplexml_load_string($xml);
+        $thoi_gian_cap_nhat = $data->DateTime;
+        $ty_gia = $data->Exrate;
+        $i = 1;
+        foreach ($ty_gia as $ngoai_te) {
+            $ma = $ngoai_te['CurrencyCode'];
+            $ten = $ngoai_te['CurrencyName'];
+            $gia_mua = $ngoai_te['Buy'];
+            $gia_chuyen_khoan = $ngoai_te['Transfer'];
+            $gia_ban = $ngoai_te['Sell'];
+            $class_color = "success";
+            if ($i % 2 == 0) {
+                $class_color = "info";
+            }
+            echo "<tr class='" . $class_color . "'>";
+            echo "<td>" . $ma . "</td>";
+            echo "<td>" . $ten . "</td>";
+            echo "<td>" . $gia_mua . "</td>";
+            echo "<td>" . $gia_chuyen_khoan . "</td>";
+            echo "<td>" . $gia_ban . "</td>";
+            echo "</tr>";
+            $i++;
+        }
+    }
+    ?>
+    </tbody>
+    <tfoot>
+    <?php if($thoi_gian_cap_nhat != ""){
+    $thoi_gian_cap_nhat = date_format(date_create($thoi_gian_cap_nhat),'H:i:s d-m-Y');
+    $thoi_gian_cap_nhat = explode(' ', $thoi_gian_cap_nhat);
+    $gio = $thoi_gian_cap_nhat[0];
+    $ngay = $thoi_gian_cap_nhat[1];
+    ?>
+    <tr>
+        <th colspan="5">Tỷ giá được cập nhật lúc <?php echo $gio; ?> ngày <?php echo $ngay; ?> </th>
+    </tr>
+    <?php } ?>
+    </tfoot>
+</table>
+</body>
+</html>
+
