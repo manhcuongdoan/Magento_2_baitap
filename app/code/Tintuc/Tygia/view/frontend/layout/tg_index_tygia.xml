@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * tg_index_tygia
+ *
+ * @copyright Copyright © 2020 Staempfli AG. All rights reserved.
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Tintuc\Tygia\Block\Index" name="tg_index_tygia" template="Tintuc_Tygia::tygia.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

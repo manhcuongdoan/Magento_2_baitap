@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * tt_index_thoitiet
+ *
+ * @copyright Copyright © 2020 Staempfli AG. All rights reserved.
+ * @author    juan.alonso@staempfli.com
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Tintuc_Thoitiet::css/style.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Tintuc\Thoitiet\Block\Index" name="tt_index_thoitiet" template="Tintuc_Thoitiet::thoitiet.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
